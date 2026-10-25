@@ -45,8 +45,35 @@
       <section class="section count"><div class="quote"><q>بعض اللحظات لا تكتمل<br>إلا بمن نحب.</q></div><div><div class="kicker"><span>02</span><i></i><span>نعدّ الأيام</span></div><h2>موعدنا<br><em>يقترب.</em></h2><div class="timer" id="timer"></div></div></section>
       <section id="rsvp" class="closing"><div class="flourish"><span></span><i></i><span></span></div><p>ننتظركم بكل شوق</p><h2>شاركونا <em>الفرحة</em></h2><p>احفظوا الموعد، وكونوا معنا في بداية حكايتنا.</p><div class="actions"><button class="primary" onclick="addCalendar()">أضف إلى التقويم</button><button class="secondary" onclick="openMap()">عرض المكان</button></div><p class="signature">محمود ومريم</p></section>
     </main>
-    <footer class="footer">بكل الحب　·　13 · 11 · 2026</footer>
+    <footer class="footer">بكل الحب　·　13 · 11 · 2026<div class="credit">الموسيقى: «Nocturne in G minor» لشوبن — أداء Caela Harrison، ترخيص CC BY 2.5</div></footer>
   </div>
+  <audio id="bgm" src="music.mp3" loop preload="none"></audio>
+  <button id="bgmBtn" class="bgm" type="button" aria-label="تشغيل أو إيقاف الموسيقى" aria-pressed="true" title="الموسيقى">♪</button>
+  <style>
+    .bgm{position:fixed;left:18px;bottom:18px;z-index:15;width:46px;height:46px;border-radius:50%;border:1px solid rgba(169,104,131,.55);background:rgba(255,253,248,.92);color:#9C6575;font:21px 'Amiri',serif;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 16px rgba(156,101,117,.16);transition:transform .2s,opacity .2s;animation:bgmGlow 3.4s ease-in-out infinite}
+    .bgm.is-off{opacity:.5;animation:none}
+    .bgm:hover{transform:scale(1.07)}
+    .bgm:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(169,104,131,.28)}
+    .credit{display:block;margin-top:7px;opacity:.72;font-size:8px}
+    @keyframes bgmGlow{0%,100%{box-shadow:0 6px 16px rgba(156,101,117,.16)}50%{box-shadow:0 6px 16px rgba(156,101,117,.16),0 0 0 9px rgba(169,104,131,.07)}}
+    @media(max-width:760px){.bgm{width:42px;height:42px;left:14px;bottom:14px;font-size:19px}}
+    @media(prefers-reduced-motion:reduce){.bgm{animation:none}}
+  </style>
+  <script>
+    (function(){
+      var a=document.getElementById('bgm'), b=document.getElementById('bgmBtn');
+      var want=true;
+      a.volume=0.35; /* هادية جدا */
+      function paint(){var on=!a.paused;b.classList.toggle('is-off',!on);b.setAttribute('aria-pressed',on?'true':'false')}
+      function play(){a.play().then(paint).catch(paint)}
+      function firstGesture(){if(want&&a.paused)play()}
+      ['pointerdown','touchstart','keydown'].forEach(function(ev){window.addEventListener(ev,firstGesture,{once:true,passive:true})});
+      b.addEventListener('click',function(){if(a.paused){want=true;play()}else{want=false;a.pause();paint()}});
+      a.addEventListener('play',paint);a.addEventListener('pause',paint);
+      document.addEventListener('visibilitychange',function(){if(document.hidden)a.pause();else if(want)play()});
+      play();
+    })();
+  </script>
   <script>
     const eventDate=new Date('2026-11-13T18:30:00');
     function pad(n){return String(n).padStart(2,'0')}
